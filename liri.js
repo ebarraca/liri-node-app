@@ -1,3 +1,38 @@
+//
+// 8. At the top of the `liri.js` file, add code to read and set any environment variables with the dotenv package:
+var DotEnv = require('dotenv').config()
+
+var spotify = require('spotify');
+console.log (spotify);
+
+var twitter = require('twitter');
+console.log (twitter);
+
+var request = require('request');
+console.log(request);
+
+// ```js
+// require("dotenv").config();
+// ```
+//
+// 9. Add the code required to import the `keys.js` file and store it in a variable.
+//
+// * You should then be able to access your keys information like so
+//
+//   ```js
+//   var spotify = new Spotify(keys.spotify);
+//   var client = new Twitter(keys.twitter);
+
+var key = require('./key.js');
+var spotify = new Spotify(key.spotify);
+var client = new Twitter(key.twitter);
+
+// // module.exports = {
+// // 	essentials: essentials,
+// // 	nicetohaves: nicetohaves
+
+
+
 var Twitter = require('twitter');
 
 var client = new Twitter({
