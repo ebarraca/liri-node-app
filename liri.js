@@ -8,6 +8,8 @@ var Twitter = require('twitter');
 
 var request = require('request');
 
+var omdb = require('omdb');
+
 // ```js
 // require("dotenv").config();
 // ```
@@ -49,10 +51,14 @@ if (process.argv[2] === "my-tweets") {
       if (!error) {
 
           for (var i = 0; i < tweets.length; i++) {
-          console.log('---------------------------')
-          console.log(tweets[i].text);
-          console.log(tweets[i].created_at);
-          console.log('---------------------------')
+
+              var twitterResults =
+                  "@" + tweets[i].user.screen_name + ": " +
+                  tweets[i].text + "\r\n" +
+                  tweets[i].created_at + "\r\n" +
+                  "-------------------------------------------------------------" + "\r\n";
+                  console.log(twitterResults);
+
       };
 
       }
@@ -76,11 +82,50 @@ var spotify = new Spotify({
             return;
         }
 
-        console.log(data.tracks.items[0]);
+        var songInfo = data.tracks.items
+        for (var i = 0; i < songInfo.length; i++) {
 
-
-        // Do something with 'data'
+                var spotifyResults =
+                    "Artist: " + songInfo[i].artists[0].name + "\r\n" +
+                    "Song: " + songInfo[i].name + "\r\n" +
+                    "Album the song is from: " + songInfo[i].album.name + "\r\n" +
+                    "Preview Url: " + songInfo[i].preview_url + "\r\n" +
+                    "-------------------------------------------------------------" + "\r\n";
+                    console.log(spotifyResults);
+            }
     });
-
-
 }
+
+// * If no song is provided then your program will default to "The Sign" by Ace of Base.
+
+//
+if (process.argv[2] === "movie-this") {
+    var movie = process.argv[3];
+    // Then run a request to the OMDB API with the movie specified
+    var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+
+    // This line is just to help us debug against the actual URL.
+    // console.log(queryUrl);
+
+    // Then create a request to the queryUrl
+    var request = require("request");
+    request(queryUrl, function(error, response, body) {
+
+      // If the request is successful
+      if (!error && response.statusCode === 200) {
+      // ...
+
+      var OMDBResults =
+          "Year: " + JSON.parse(body).Year + "\r\n" +
+          "IMDB Rating: " + JSON.parse(body).imdbRating + "\r\n" +
+          // "Rotten Tomatoes Rating: " + xx + "\r\n" +
+          "Country: " + JSON.parse(body).Country + "\r\n" +
+          "Language: " + JSON.parse(body).Language + "\r\n" +
+          "Plot: " + JSON.parse(body).Plot + "\r\n" +
+          "Actors: " + JSON.parse(body).Actors + "\r\n" +
+          "-------------------------------------------------------------" + "\r\n";
+          console.log(OMDBResults);
+
+      };
+    });
+};
