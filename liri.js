@@ -1,6 +1,6 @@
 //
 // 8. At the top of the `liri.js` file, add code to read and set any environment variables with the dotenv package:
-var DotEnv = require('dotenv').config()
+require('dotenv').config()
 
 var Spotify = require('node-spotify-api');
 
@@ -9,6 +9,7 @@ var Twitter = require('twitter');
 var request = require('request');
 
 var omdb = require('omdb');
+var keys = require('./key.js')
 
 // ```js
 // require("dotenv").config();
@@ -33,12 +34,7 @@ var omdb = require('omdb');
 
 if (process.argv[2] === "my-tweets") {
 
-    var client = new Twitter({
-      consumer_key: 'KlQZ1CLwvV3lDBKam7x08WOTy',
-      consumer_secret: 'Ys8pwcop4srY6u6qAXFnA0Vyqcd7tFUiG2ihsIfNsbSoCazTAZ',
-      access_token_key: '14344783-v3JUGB7VqX69hrirrzP2pZkUxv1kusmZcqWABrPov',
-      access_token_secret: 'Z721scUivD3v4Ht0VjQz13jnHooKAbrZcjknRHK42lNoh'
-    });
+    var client = new Twitter(keys.twitter);
 
     var params = {screen_name: 'littlepretty'};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
@@ -64,11 +60,8 @@ if (process.argv[2] === "spotify-this-song") {
 
     //this is b/c user types "spotify this song, and then the song name"
 
-var spotify = new Spotify({
-    id: '92097ecfeeef4f78923cd7326b10b2bd',
-    secret: '43395a0622514ba2be7b22926897e65e'
-}
-);
+var spotify = new Spotify(keys.spotify);
+
 
     spotify.search({ type: 'track', query: songTitle }, function(err, data) {
         if ( err ) {
@@ -112,13 +105,14 @@ if (process.argv[2] === "movie-this") {
       var OMDBResults =
           "Year: " + JSON.parse(body).Year + "\r\n" +
           "IMDB Rating: " + JSON.parse(body).imdbRating + "\r\n" +
-          // "Rotten Tomatoes Rating: " + xx + "\r\n" +
+          "Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value + "\r\n" +
           "Country: " + JSON.parse(body).Country + "\r\n" +
           "Language: " + JSON.parse(body).Language + "\r\n" +
           "Plot: " + JSON.parse(body).Plot + "\r\n" +
           "Actors: " + JSON.parse(body).Actors + "\r\n" +
           "-------------------------------------------------------------" + "\r\n";
           console.log(OMDBResults);
+          // console.log(JSON.parse(body));
 
       };
     });
