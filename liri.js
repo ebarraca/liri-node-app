@@ -29,8 +29,18 @@ if (process.argv[2] === "my-tweets") {
      });
    }
 
-   if (process.argv[2] === "spotify-this-song") {
-    var songTitle = process.argv[3] ? process.argv[3] : "'The Sign' by Ace of Base";
+if (process.argv[2] === "spotify-this-song") {
+   var output = "";
+     for (var i = 3; i < process.argv.length; i++) {
+       output += process.argv[i] + " ";
+     };
+
+     var songTitle = output ? output : "'The Sign' by Ace of Base";
+
+     console.log(output)
+
+   // if (process.argv[2] === "spotify-this-song") {
+   //  var songTitle = process.argv[3] ? process.argv[3] : "'The Sign' by Ace of Base";
     var spotify = new Spotify(keys.spotify);
 
     spotify.search({ type: 'track', query: songTitle }, function(err, data) {
